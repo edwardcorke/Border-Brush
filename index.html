@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Border Brush — Border Editing Tool</title>
-    <link rel="icon" type="image/png" href="border_brush_icon.png">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link rel="icon" type="image/png" href="border_brush_icon.png">
     <style>
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #1f2937; }
@@ -37,17 +37,17 @@
 
         <aside class="w-full lg:w-80 bg-[#12141c] border-b lg:border-b-0 lg:border-r border-gray-800 p-6 flex flex-col justify-between overflow-y-auto shrink-0 z-10 shadow-xl">
             <div class="flex flex-col h-full">
-              <div class="mb-6 flex justify-between items-start shrink-0">
-              <div class="flex items-center gap-3">
-                  <img src="border_brush_icon.png" alt="Logo" class="w-8 h-8 rounded-lg">
-                  <div>
-                      <h1 class="text-xl font-medium tracking-tight text-white">
-                          Border Brush
-                      </h1>
-                      <p class="text-xs text-gray-400 mt-0.5">Border Editing Tool</p>
-                  </div>
-              </div>
-            </div>
+                <div class="mb-6 flex justify-between items-start shrink-0">
+                    <div class="flex items-center gap-3">
+                        <img src="border_brush_icon.png" alt="Logo" class="w-8 h-8 rounded-lg">
+                        <div>
+                            <h1 class="text-xl font-medium tracking-tight text-white">
+                                Border Brush
+                            </h1>
+                            <p class="text-xs text-gray-400 mt-0.5">Border Editing Tool</p>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="relative flex-1 mt-2">
 
@@ -59,7 +59,7 @@
 
                         <div class="flex items-center justify-between border-b border-gray-800 pb-4">
                             <span class="text-xs font-semibold tracking-wider uppercase text-gray-300">Settings</span>
-                            <button id="syncAllBtn" class="text-[10px] uppercase tracking-wider font-bold bg-gray-800 hover:bg-gray-700 text-white py-1 px-2 rounded transition-colors" title="Apply these settings to all uploaded images">
+                            <button id="syncAllBtn" class="cursor-pointer text-[10px] uppercase tracking-wider font-bold bg-gray-800 hover:bg-gray-700 text-white py-1 px-2 rounded transition-colors" title="Apply these settings to all uploaded images">
                                 Sync to All
                             </button>
                         </div>
@@ -106,13 +106,26 @@
             </div>
 
             <div class="mt-8 pt-6 border-t border-gray-800 space-y-3 shrink-0">
-                <button id="addImagesBtn" class="hidden w-full py-2 bg-gray-800 hover:bg-gray-700 text-white text-xs font-medium rounded-lg transition-all duration-200">
+                <button id="addImagesBtn" class="hidden cursor-pointer w-full py-2 bg-gray-800 hover:bg-gray-700 text-white text-xs font-medium rounded-lg transition-all duration-200">
                     Add More Images
                 </button>
-                <button id="downloadAllBtn" class="hidden w-full py-3 bg-white hover:bg-gray-100 disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed text-black font-medium text-sm rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm">
-                    Download All (.zip)
-                </button>
-                <button id="clearBtn" class="hidden w-full py-2 bg-transparent hover:bg-gray-900 text-gray-400 hover:text-white text-xs font-medium rounded-lg transition-all duration-200">
+
+                <div id="downloadActionGroup" class="hidden relative flex w-full shadow-sm">
+                    <button id="mainDownloadBtn" class="cursor-pointer flex-1 py-3 bg-white hover:bg-gray-100 disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed text-black font-medium text-sm rounded-lg transition-all duration-200 flex items-center justify-center gap-2">
+                        Download Image
+                    </button>
+                    <button id="downloadDropdownBtn" class="hidden cursor-pointer px-3 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-700 disabled:text-gray-500 border-l border-gray-300 disabled:border-gray-600 text-black rounded-r-lg transition-all duration-200 flex items-center justify-center">
+                        <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="downloadDropdownMenu" class="hidden absolute bottom-full right-0 mb-2 w-48 bg-[#1a1d28] border border-gray-700 rounded-lg shadow-xl overflow-hidden z-50">
+                        <button id="downloadZipBtn" class="cursor-pointer w-full text-left px-4 py-3 text-sm text-gray-200 hover:bg-gray-800 transition-colors flex items-center gap-2">
+                            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                            Download as .zip
+                        </button>
+                    </div>
+                </div>
+
+                <button id="clearBtn" class="hidden cursor-pointer w-full py-2 bg-transparent hover:bg-gray-900 text-gray-400 hover:text-white text-xs font-medium rounded-lg transition-all duration-200">
                     Clear Images
                 </button>
             </div>
@@ -121,12 +134,12 @@
         <main class="flex-1 flex flex-col min-w-0 bg-[#0b0c10] relative">
 
             <div id="topNav" class="absolute top-0 left-0 right-0 p-4 z-20 flex justify-between items-center hidden pointer-events-none">
-                <button id="backToGridBtn" class="pointer-events-auto flex items-center gap-2 text-sm font-medium bg-[#12141c]/80 backdrop-blur border border-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg transition-all shadow-lg">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                <button id="backToGridBtn" class="cursor-pointer pointer-events-auto flex items-center gap-2 text-sm font-medium bg-[#12141c]/80 backdrop-blur border border-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg transition-all shadow-lg hover:scale-105 active:scale-95">
+                    <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Back to Grid
                 </button>
-                <button id="removeCurrentBtn" class="pointer-events-auto flex items-center gap-2 text-sm font-medium bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 px-4 py-2 rounded-lg transition-all shadow-lg">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                <button id="removeCurrentBtn" class="cursor-pointer pointer-events-auto flex items-center gap-2 text-sm font-medium bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 px-4 py-2 rounded-lg transition-all shadow-lg hover:scale-105 active:scale-95">
+                    <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     Remove
                 </button>
             </div>
@@ -134,9 +147,9 @@
             <div id="workspace" class="flex-1 w-full h-full p-6 overflow-y-auto flex flex-col items-center justify-center relative">
                 <div id="dropzone" class="border border-dashed border-gray-800 hover:border-gray-600 rounded-xl max-w-xl w-full p-12 text-center cursor-pointer transition-all duration-200 group flex flex-col items-center justify-center">
                     <input type="file" id="fileInput" multiple accept="image/jpeg,image/png" class="hidden">
-                    <svg class="w-8 h-8 text-gray-500 group-hover:text-gray-300 mb-4 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"></path></svg>
-                    <p class="text-sm font-medium text-gray-300">Upload your images here</p>
-                    <p class="text-xs text-gray-500 mt-1">Supports high-res JPEG and PNG files</p>
+                    <svg class="w-8 h-8 text-gray-500 group-hover:text-gray-300 mb-4 transition-colors pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"></path></svg>
+                    <p class="text-sm font-medium text-gray-300 pointer-events-none">Upload your images here</p>
+                    <p class="text-xs text-gray-500 mt-1 pointer-events-none">Supports high-res JPEG and PNG files</p>
                 </div>
 
                 <div id="previewGrid" class="hidden w-full h-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 auto-rows-max pb-12">
@@ -180,7 +193,12 @@
         const outerSlider = document.getElementById('outerRadius');
         const outerNum = document.getElementById('outerRadiusNum');
 
-        const downloadAllBtn = document.getElementById('downloadAllBtn');
+        const downloadActionGroup = document.getElementById('downloadActionGroup');
+        const mainDownloadBtn = document.getElementById('mainDownloadBtn');
+        const downloadDropdownBtn = document.getElementById('downloadDropdownBtn');
+        const downloadDropdownMenu = document.getElementById('downloadDropdownMenu');
+        const downloadZipBtn = document.getElementById('downloadZipBtn');
+
         const clearBtn = document.getElementById('clearBtn');
         const backToGridBtn = document.getElementById('backToGridBtn');
         const syncAllBtn = document.getElementById('syncAllBtn');
@@ -195,18 +213,39 @@
         fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
         addImagesBtn.addEventListener('click', () => fileInput.click());
 
+        downloadDropdownBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            downloadDropdownMenu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!downloadDropdownBtn.contains(e.target) && !downloadDropdownMenu.contains(e.target)) {
+                downloadDropdownMenu.classList.add('hidden');
+            }
+        });
+
         function updateButtonVisibility() {
             if (uploadedImages.length >= 1) {
                 addImagesBtn.classList.remove('hidden');
                 clearBtn.classList.remove('hidden');
+                downloadActionGroup.classList.remove('hidden');
+
+                if (uploadedImages.length > 1) {
+                    mainDownloadBtn.classList.remove('rounded-lg');
+                    mainDownloadBtn.classList.add('rounded-l-lg');
+                    downloadDropdownBtn.classList.remove('hidden');
+                    mainDownloadBtn.textContent = 'Download All';
+                } else {
+                    mainDownloadBtn.classList.remove('rounded-l-lg');
+                    mainDownloadBtn.classList.add('rounded-lg');
+                    downloadDropdownBtn.classList.add('hidden');
+                    mainDownloadBtn.textContent = 'Download Image';
+                }
             } else {
                 addImagesBtn.classList.add('hidden');
                 clearBtn.classList.add('hidden');
-            }
-            if (uploadedImages.length > 1) {
-                downloadAllBtn.classList.remove('hidden');
-            } else {
-                downloadAllBtn.classList.add('hidden');
+                downloadActionGroup.classList.add('hidden');
+                downloadDropdownMenu.classList.add('hidden');
             }
         }
 
@@ -269,10 +308,14 @@
                 card.onclick = (e) => { if(!e.target.closest('button')) openDetailView(img.id); };
                 const s = 0.25;
                 card.innerHTML = `
-                    <button onclick="removeImage('${img.id}')" class="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-red-500 text-white rounded-lg transition-colors z-10 opacity-0 group-hover:opacity-100">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                    <div class="relative flex-1 flex items-center justify-center bg-black/40 rounded-lg overflow-hidden h-[240px] p-4">
+                <button onclick="removeImage('${img.id}')"
+                  class="cursor-pointer absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-black/50 hover:bg-red-500 text-white rounded-lg transition-all hover:scale-105 active:scale-95 opacity-0 group-hover:opacity-100 z-10" 
+                  title="Remove image">
+              <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+              </button>
+                    <div class="relative flex-1 flex items-center justify-center bg-black/40 rounded-lg overflow-hidden h-[240px] p-4 pointer-events-none">
                         <div style="background-color: ${img.color}; padding: ${Math.max(2, img.borderW * s)}px; border-radius: ${img.outerRadius * s}px;">
                             <img src="${img.previewUrl}" class="max-w-full max-h-[200px] object-contain" style="border-radius: ${img.radius * s}px;">
                         </div>
@@ -282,8 +325,8 @@
                             <p class="text-xs font-medium text-gray-200 truncate">${img.name}</p>
                             <p class="text-[10px] text-gray-500 font-mono mt-0.5">${img.naturalWidth} × ${img.naturalHeight} px</p>
                         </div>
-                        <button onclick="downloadSingle('${img.id}')" class="shrink-0 p-2 bg-gray-800 hover:bg-white text-gray-400 hover:text-black rounded-lg transition-colors duration-200">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <button onclick="downloadSingle('${img.id}')" class="cursor-pointer relative z-10 shrink-0 p-2 bg-gray-800 hover:bg-white text-gray-400 hover:text-black rounded-lg transition-all duration-200 hover:scale-105 active:scale-95" title="Download image">
+                            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                         </button>
                     </div>
                 `;
@@ -441,13 +484,11 @@
                     processingCanvas.width = destW;
                     processingCanvas.height = destH;
 
-                    // Draw Rounded Background
                     ctx.fillStyle = imgItem.color;
                     ctx.beginPath();
                     ctx.roundRect(0, 0, destW, destH, outerRadius);
                     ctx.fill();
 
-                    // Draw Image Inner
                     ctx.save();
                     if (radius > 0) {
                         ctx.beginPath();
@@ -481,19 +522,46 @@
             URL.revokeObjectURL(link.href);
         }
 
-        downloadAllBtn.addEventListener('click', async () => {
+        mainDownloadBtn.addEventListener('click', async () => {
             if (!uploadedImages.length) return;
-            downloadAllBtn.disabled = true;
-            downloadAllBtn.textContent = 'Processing ZIP...';
+
+            mainDownloadBtn.disabled = true;
+            downloadDropdownBtn.disabled = true;
+            const originalText = mainDownloadBtn.textContent;
+            mainDownloadBtn.textContent = 'Processing...';
+
+            for (let item of uploadedImages) {
+                await downloadSingle(item.id);
+                if (uploadedImages.length > 1) {
+                    await new Promise(r => setTimeout(r, 300));
+                }
+            }
+
+            mainDownloadBtn.disabled = false;
+            downloadDropdownBtn.disabled = false;
+            mainDownloadBtn.textContent = originalText;
+        });
+
+        downloadZipBtn.addEventListener('click', async () => {
+            if (!uploadedImages.length) return;
+
+            downloadDropdownMenu.classList.add('hidden');
+            mainDownloadBtn.disabled = true;
+            downloadDropdownBtn.disabled = true;
+            const originalText = mainDownloadBtn.textContent;
+            mainDownloadBtn.textContent = 'Processing ZIP...';
+
             const zip = new JSZip();
             for (let item of uploadedImages) {
                 const { blob, fileName } = await processHighResImage(item);
                 zip.file(fileName, blob);
             }
+
             zip.generateAsync({ type: 'blob' }).then((content) => {
                 triggerDownload(content, `border_brush_export_${Date.now()}.zip`);
-                downloadAllBtn.disabled = false;
-                downloadAllBtn.textContent = 'Download All (.zip)';
+                mainDownloadBtn.disabled = false;
+                downloadDropdownBtn.disabled = false;
+                mainDownloadBtn.textContent = originalText;
             });
         });
     </script>
